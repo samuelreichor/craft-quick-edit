@@ -3,13 +3,21 @@
   "description": "A plugin that adds a cp edit url to the frontend.",
   "type": "craft-plugin",
   "license": "mit",
+  "version": "5.0.0",
   "support": {
     "email": "samuelreichor@gmail.com",
-    "issues": "https://github.com/samuelreichor/craft-qick-edit/issues?state=open",
-    "source": "https://github.com/samuelreichor/craft-qick-edit",
-    "docs": "https://github.com/samuelreichor/craft-qick-edit",
-    "rss": "https://github.com/samuelreichor/craft-qick-edit/releases.atom"
+    "issues": "https://github.com/samuelreichor/craft-quick-edit/issues?state=open",
+    "source": "https://github.com/samuelreichor/craft-quick-edit",
+    "docs": "https://github.com/samuelreichor/craft-quick-edit",
+    "rss": "https://github.com/samuelreichor/craft-quick-edit/releases.atom"
   },
+  "keywords": [
+    "craftcms",
+    "craft-plugin",
+    "enhence author experience",
+    "edit page link",
+    "quick edit"
+  ],
   "require": {
     "php": ">=8.2",
     "craftcms/cms": "^5.0.0"
@@ -24,11 +32,11 @@
     }
   },
   "extra": {
-    "handle": "craft-quick-edit",
-    "name": "craft-quick-edit",
+    "handle": "quick-edit",
+    "name": "Quick Edit",
     "developer": "Samuel Reichör",
-    "documentationUrl": "https://github.com/samuelreichor/craft-qick-edit",
-    "class": "samuelreichor\\quickedit\\QickEdit"
+    "documentationUrl": "https://samuelreichor.at/libraries/craft-quick-edit",
+    "class": "samuelreichor\\quickedit\\QuickEdit"
   },
   "scripts": {
     "check-cs": "ecs check --ansi",
@@ -44,5 +52,11 @@
       "yiisoft/yii2-composer": true,
       "craftcms/plugin-installer": true
     }
-  }
+  },
+  "authors": [
+    {
+      "name": "Samuel Reichör",
+      "homepage": "https://samuelreichor.at/libraries"
+    }
+  ]
 }

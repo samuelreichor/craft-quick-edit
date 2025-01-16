@@ -1,30 +1,45 @@
-# craft-quick-edit
+<div align="center">
+	<a href="https://packagist.org/packages/samuelreichor/craft-quick-edit" align="center">
+      <img src="https://online-images-sr.netlify.app/assets/craft-quick-edit.png" width="100" alt="Quick Edit">
+	</a>
+  <br>
+	<h1 align="center">Quick Edit for Craft CMS</h1>
+  <p align="center">
+    Quick Edit is a Craft CMS plugin that provides an edit entry link for your frontend.
+  </p>
+  <br/>
+</div>
 
-A plugin that adds a cp edit url to the frontend.
+<p align="center">
+  <a href="https://packagist.org/packages/samuelreichor/craft-quick-edit">
+    <img src="https://img.shields.io/packagist/v/samuelreichor/craft-quick-edit?label=version&color=blue">
+  </a>
+  <a href="https://packagist.org/packages/samuelreichor/craft-quick-edit">
+    <img src="https://img.shields.io/packagist/dt/samuelreichor/craft-quick-edit?color=blue">
+  </a>
+  <a href="https://packagist.org/packages/samuelreichor/craft-quick-edit">
+    <img src="https://img.shields.io/packagist/php-v/samuelreichor/craft-quick-edit?color=blue">
+  </a>
+  <a href="https://packagist.org/packages/samuelreichor/craft-quick-edit">
+    <img src="https://img.shields.io/packagist/l/samuelreichor/craft-quick-edit?color=blue">
+  </a>
+</p>
+
+## Features
+
+- Compatible with pages cached by Blitz.
+- Fully customizable styling.
+- Displays only if the logged-in user has permission to save the entry.
+- No configuration required.
 
 ## Requirements
 
 This plugin requires Craft CMS 5.0.0 or later, and PHP 8.2 or later.
 
-## Installation
+## Documentation
 
-You can install this plugin from the Plugin Store or with Composer.
+Visit the [Quick Edit page](https://samuelreichor.at/libraries/craft-quick-edit) for all documentation and guides.
 
-#### From the Plugin Store
+## Support
 
-Go to the Plugin Store in your project’s Control Panel and search for “craft-quick-edit”. Then press “Install”.
-
-#### With Composer
-
-Open your terminal and run the following commands:
-
-```bash
-# go to the project directory
-cd /path/to/my-project.test
-
-# tell Composer to load the plugin
-composer require samuelreichor/craft-quick-edit
-
-# tell Craft to install the plugin
-./craft plugin/install craft-quick-edit
-```
+If you encounter bugs or have feature requests, [please submit an issue](/../../issues/new). Your feedback helps improve the library!

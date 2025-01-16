@@ -1,4 +1,4 @@
-# Release Notes for craft-quick-edit
+# Release Notes for Quick Edit
 
-## 1.0.0
-- Initial release
+## 5.0.0 - 2025-01.19
+- Initial Release

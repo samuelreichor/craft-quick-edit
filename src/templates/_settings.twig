@@ -1,6 +1,22 @@
-{# @var plugin \samuelreichor\quickedit\QickEdit #}
+{# @var plugin \samuelreichor\quickedit\QuickEdit #}
 {# @var settings \samuelreichor\quickedit\models\Settings #}
 
 {% import '_includes/forms.twig' as forms %}
 
-{# ... #}
+<div style="max-width: 700px">
+  {{ forms.lightswitchField({
+    label: 'Disable Quick Edit',
+    instructions: 'Whether the quick edit link should be disabled.',
+    id: 'is-global-disabled',
+    name: 'isGlobalDisabled',
+    on: settings.isGlobalDisabled,
+  }) }}
+
+  {{ forms.lightswitchField({
+    label: 'Open Edit Link in new Window',
+    instructions: 'Enable this option to open the edit link to the entry in a new window.',
+    id: 'target-blank',
+    name: 'targetBlank',
+    on: settings.targetBlank,
+  }) }}
+</div>
