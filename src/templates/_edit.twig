@@ -2,23 +2,30 @@
 
 <script>
   if(everLoggedIn()) {
+    let linkInner = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
+      </svg>
+    `;
+    const linkText = "{{ linkText }}";
+    if (linkText) {
+      linkInner = linkText;
+    }
+    const apiUrl = `/quickEdit/checkPermission/` + {{entryId}};
     document.addEventListener("DOMContentLoaded", async () => {
       try {
-        const apiUrl = `/quickEdit/checkPermission/` + {{entryId}};
         const response = await fetch(apiUrl);
         const data = await response.json();
         const canEdit = data.canEdit;
         const parentEl = document.querySelector('.craft-quick-edit');
         if (canEdit) {
-          parentEl.innerHTML = `
-            <a class="craft-quick-edit_link" target="{{ target }}" href="{{ cpEditUrl }}" title="Edit Page">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
-              </svg>
-            </a>
-        `;
-        } else {
-          parentEl.innerHTML = '';
+          const linkEl = document.createElement('a');
+          linkEl.classList.add('craft-quick-edit_link');
+          linkEl.target = "{{ target }}";
+          linkEl.href = "{{ cpEditUrl }}";
+          linkEl.title = "Edit Page";
+          linkEl.innerHTML = linkInner;
+          parentEl.appendChild(linkEl);
         }
       } catch (error) {
         console.error('Quick Edit Error:', error);
@@ -36,6 +43,7 @@
   .craft-quick-edit {
     .craft-quick-edit_link {
       position: fixed;
+      display: flex;
       top: 0.5rem;
       right: 0.5rem;
       z-index: 1000;

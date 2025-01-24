@@ -41,6 +41,7 @@ class EditService extends Component
                 'target' => self::getTarget(),
                 'entryId' => $entry->id,
                 'cpEditUrl' => self::getQuickEditUrl($entry),
+                'linkText' => self::getLinkText(),
             ]);
 
             // render to page
@@ -98,5 +99,15 @@ class EditService extends Component
         }
 
         return $entry->getCpEditUrl();
+    }
+
+    /**
+     * Get Link Text
+     *
+     * @return string
+     */
+    public function getLinkText(): string
+    {
+        return ltrim(QuickEdit::getInstance()->getSettings()->linkText);
     }
 }
