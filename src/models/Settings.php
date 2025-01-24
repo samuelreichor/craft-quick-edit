@@ -12,4 +12,5 @@ class Settings extends Model
 {
     public bool $isGlobalDisabled = false;
     public bool $targetBlank = false;
+    public bool $isStandalonePreview = false;
 }

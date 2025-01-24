@@ -5,6 +5,7 @@ namespace samuelreichor\quickedit\services;
 use Craft;
 use craft\base\Component;
 use craft\elements\Entry;
+use craft\helpers\UrlHelper;
 use craft\web\View;
 use samuelreichor\quickedit\QuickEdit;
 use yii\base\InvalidConfigException;
@@ -39,7 +40,7 @@ class EditService extends Component
             $html = Craft::$app->getView()->renderTemplate('quick-edit/_edit.twig', [
                 'target' => self::getTarget(),
                 'entryId' => $entry->id,
-                'cpEditUrl' => $entry->cpEditUrl,
+                'cpEditUrl' => self::getQuickEditUrl($entry),
             ]);
 
             // render to page
@@ -82,5 +83,20 @@ class EditService extends Component
     public function getTarget(): string
     {
         return QuickEdit::getInstance()->getSettings()->targetBlank ? '_blank' : '_self';
+    }
+
+    /**
+     * Get cp edit url (default or standalone)
+     *
+     * @param Entry $entry
+     * @return string
+     */
+    public function getQuickEditUrl(Entry $entry): string
+    {
+        if(QuickEdit::getInstance()->getSettings()->isStandalonePreview) {
+            return UrlHelper::cpUrl() . '/preview/' . $entry->id;
+        }
+
+        return $entry->getCpEditUrl();
     }
 }
