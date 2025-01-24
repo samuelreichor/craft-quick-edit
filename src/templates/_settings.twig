@@ -12,6 +12,15 @@
     on: settings.isGlobalDisabled,
   }) }}
 
+  {{ forms.textField({
+    label: 'Change Link Text',
+    instructions: 'To render a link text instead of the icon, type some text in.',
+    id: 'link-text',
+    name: 'linkText',
+    placeholder: 'Leave blank to render the icon.',
+    value: settings.linkText,
+  }) }}
+
   {{ forms.lightswitchField({
     label: 'Open Edit Link in new Window',
     instructions: 'Enable this option to open the edit link to the entry in a new window.',
