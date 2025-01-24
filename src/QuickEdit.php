@@ -5,6 +5,8 @@ namespace samuelreichor\quickedit;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\controllers\UsersController;
+use craft\events\FindLoginUserEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
@@ -80,6 +82,14 @@ class QuickEdit extends Plugin
                 $event->rules = array_merge($event->rules, [
                     'GET /quickEdit/checkPermission/<entryId>' => 'quick-edit/default/check-permission',
                 ]);
+            }
+        );
+
+        Event::on(
+            UsersController::class,
+            UsersController::EVENT_AFTER_FIND_LOGIN_USER,
+            function (FindLoginUserEvent $event) {
+                setcookie("ever-logged-in", "true", time() + 30 * 24 * 60 * 60);
             }
         );
     }
