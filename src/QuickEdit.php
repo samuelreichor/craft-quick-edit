@@ -56,9 +56,12 @@ class QuickEdit extends Plugin
 
     protected function settingsHtml(): ?string
     {
+        $renderPreviewModeSetting = version_compare(Craft::$app->getVersion(), '5.6.0', '>=');
+
         return Craft::$app->view->renderTemplate('quick-edit/_settings.twig', [
             'plugin' => $this,
             'settings' => $this->getSettings(),
+            'renderPreviewModeSetting' => $renderPreviewModeSetting,
         ]);
     }
 

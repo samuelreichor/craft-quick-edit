@@ -19,4 +19,14 @@
     name: 'targetBlank',
     on: settings.targetBlank,
   }) }}
+
+  {% if renderPreviewModeSetting %}
+    {{ forms.lightswitchField({
+      label: 'Enable Standalone Preview Mode',
+      instructions: 'Enable this option to open the edit link in the standalone preview mode.',
+      id: 'is-standalone-preview',
+      name: 'isStandalonePreview',
+      on: settings.isStandalonePreview,
+    }) }}
+  {% endif %}
 </div>
