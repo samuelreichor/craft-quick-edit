@@ -1,30 +1,31 @@
 <div class="craft-quick-edit"></div>
 
-<script>
-  if(everLoggedIn()) {
-    let linkInner = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
-      </svg>
-    `;
-    const linkText = "{{ linkText }}";
-    if (linkText) {
-      linkInner = linkText;
-    }
-    const apiUrl = `/quickEdit/checkPermission/` + {{entryId}};
+{% js %}
+  if (isLikelyLoggedIn()) {
+    const uri = "{{ craft.app.request.getPathInfo()|literal }}";
+    const siteUrl = "{{ siteUrl }}"
+    const apiUrl = siteUrl + 'actions/quick-edit/default/get-quick-edit?uri=' + encodeURIComponent(uri);
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         const response = await fetch(apiUrl);
         const data = await response.json();
-        const canEdit = data.canEdit;
-        const parentEl = document.querySelector('.craft-quick-edit');
-        if (canEdit) {
+        if (data.canEdit) {
+          const parentEl = document.querySelector('.craft-quick-edit');
+          const fallbackIcon = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
+            </svg>
+          `;
+          const linkText = (data.linkText && data.linkText.trim().length > 0)
+              ? data.linkText
+              : fallbackIcon;
           const linkEl = document.createElement('a');
           linkEl.classList.add('craft-quick-edit_link');
-          linkEl.target = "{{ target }}";
-          linkEl.href = "{{ cpEditUrl }}";
+          linkEl.target = data.target;
+          linkEl.href = data.editUrl || '#';
           linkEl.title = "Edit Page";
-          linkEl.innerHTML = linkInner;
+          linkEl.innerHTML = linkText;
           parentEl.appendChild(linkEl);
         }
       } catch (error) {
@@ -32,12 +33,11 @@
       }
     });
   }
-  function everLoggedIn() {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ever-logged-in=`);
-    return parts.length === 2;
+  
+  function isLikelyLoggedIn() {
+    return document.cookie.indexOf('logged-in=') !== -1;
   }
-</script>
+{% endjs %}
 
 <style>
   .craft-quick-edit {
@@ -52,8 +52,7 @@
       padding: 6px;
       text-decoration: none;
       border-radius: 3px;
-      transition-property: opacity;
-      transition-duration: 300ms;
+      transition: opacity 300ms;
 
       &:hover {
         opacity: 85%;
