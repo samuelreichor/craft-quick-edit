@@ -4,12 +4,12 @@ namespace samuelreichor\quickedit\services;
 
 use Craft;
 use craft\base\Component;
+use craft\commerce\elements\Product;
 use craft\elements\Entry;
 use craft\helpers\UrlHelper;
 use craft\web\View;
 use samuelreichor\quickedit\models\Settings;
 use samuelreichor\quickedit\QuickEdit;
-use yii\base\InvalidConfigException;
 
 class EditService extends Component
 {
@@ -25,37 +25,26 @@ class EditService extends Component
      * Render quick link to cp based on permission and Blitz
      *
      * @return void
-     * @throws InvalidConfigException
      */
     public function renderQuickEdit(): void
     {
-        if (!self::isGlobalEnabled()) {
+        if (!self::canRender()) {
             return;
         }
 
-        if (self::canEdit()) {
-            $uri = Craft::$app->getRequest()->getFullUri();
+        $html = Craft::$app->getView()->renderTemplate('quick-edit/_edit.twig');
 
-            if ($uri === '') {
-                $uri = '__home__';
-            }
+        Craft::$app->getView()->registerHtml($html, View::POS_END);
+    }
 
-            $entry = Entry::find()->uri($uri)->one();
-
-            if (!$entry) {
-                return;
-            }
-
-            $html = Craft::$app->getView()->renderTemplate('quick-edit/_edit.twig', [
-                'target' => self::getTarget(),
-                'entryId' => $entry->id,
-                'cpEditUrl' => self::getQuickEditUrl($entry),
-                'linkText' => self::getLinkText(),
-            ]);
-
-            // render to page
-            Craft::$app->getView()->registerHtml($html, View::POS_END);
-        }
+    /**
+     * Check is enabled and in right context
+     *
+     * @return bool
+     */
+    public function canRender(): bool
+    {
+        return self::isGlobalEnabled() && self::canEdit();
     }
 
     /**
@@ -98,16 +87,16 @@ class EditService extends Component
     /**
      * Get cp edit url (default or standalone)
      *
-     * @param Entry $entry
+     * @param Entry|Product $model
      * @return string
      */
-    public function getQuickEditUrl(Entry $entry): string
+    public function getQuickEditUrl(Entry|Product $model): string
     {
         if($this->settings->isStandalonePreview) {
-            return UrlHelper::cpUrl() . '/preview/' . $entry->id;
+            return UrlHelper::cpUrl() . '/preview/' . $model->id;
         }
 
-        return $entry->getCpEditUrl();
+        return $model->getCpEditUrl();
     }
 
     /**
