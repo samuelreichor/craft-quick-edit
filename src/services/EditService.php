@@ -7,11 +7,20 @@ use craft\base\Component;
 use craft\elements\Entry;
 use craft\helpers\UrlHelper;
 use craft\web\View;
+use samuelreichor\quickedit\models\Settings;
 use samuelreichor\quickedit\QuickEdit;
 use yii\base\InvalidConfigException;
 
 class EditService extends Component
 {
+    protected Settings $settings;
+
+    public function init(): void
+    {
+        parent::init();
+        $this->settings = QuickEdit::getInstance()->getSettings();
+    }
+
     /**
      * Render quick link to cp based on permission and Blitz
      *
@@ -73,7 +82,7 @@ class EditService extends Component
      */
     public function isGlobalEnabled(): bool
     {
-        return !QuickEdit::getInstance()->getSettings()->isGlobalDisabled;
+        return !$this->settings->isGlobalDisabled;
     }
 
     /**
@@ -83,7 +92,7 @@ class EditService extends Component
      */
     public function getTarget(): string
     {
-        return QuickEdit::getInstance()->getSettings()->targetBlank ? '_blank' : '_self';
+        return $this->settings->targetBlank ? '_blank' : '_self';
     }
 
     /**
@@ -94,7 +103,7 @@ class EditService extends Component
      */
     public function getQuickEditUrl(Entry $entry): string
     {
-        if(QuickEdit::getInstance()->getSettings()->isStandalonePreview) {
+        if($this->settings->isStandalonePreview) {
             return UrlHelper::cpUrl() . '/preview/' . $entry->id;
         }
 
@@ -108,6 +117,6 @@ class EditService extends Component
      */
     public function getLinkText(): string
     {
-        return ltrim(QuickEdit::getInstance()->getSettings()->linkText);
+        return ltrim($this->settings->linkText);
     }
 }
