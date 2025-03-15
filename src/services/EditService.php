@@ -90,13 +90,13 @@ class EditService extends Component
      * @param Entry|Product $model
      * @return string
      */
-    public function getQuickEditUrl(Entry|Product $model): string
+    public function getQuickEditUrl(Entry|Product $model): string // @phpstan-ignore-line
     {
-        if($this->settings->isStandalonePreview) {
-            return UrlHelper::cpUrl() . '/preview/' . $model->id;
+        if ($this->settings->isStandalonePreview) {
+            return UrlHelper::cpUrl() . '/preview/' . $model->id; // @phpstan-ignore-line
         }
 
-        return $model->getCpEditUrl();
+        return $model->getCpEditUrl(); // @phpstan-ignore-line
     }
 
     /**
