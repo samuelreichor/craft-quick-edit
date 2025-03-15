@@ -2,6 +2,7 @@
 
 ## 5.1.0 - 2025-03-15
 - Add support for Craft 4
+- Add a bypass setting to always show the quick edit button
 
 ## 5.0.2 - 2025-01-26
 - Add support for mutisites

@@ -42,7 +42,7 @@ class DefaultController extends Controller
             return self::respondWithNoEdit();
         }
 
-        $canEdit = Craft::$app->getElements()->canSave($model);
+        $canEdit = $editService->getIsAlwaysEnabled() || Craft::$app->getElements()->canSave($model);
 
         if (!$canEdit) {
             return self::respondWithNoEdit();
