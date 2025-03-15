@@ -1,8 +1,9 @@
 <div class="craft-quick-edit"></div>
 
 {% js %}
-  if (isLikelyLoggedIn()) {
-    const uri = "{{ craft.app.request.getPathInfo()|literal }}";
+  const isAlwaysEnabled = {{ isAlwaysEnabled }}
+  if (isLikelyLoggedIn() || isAlwaysEnabled) {
+    const uri = "{{ craft.app.request is not instance of("craft\\console\\Request") ? craft.app.request.getPathInfo() : '' }}";
     const siteUrl = "{{ siteUrl }}"
     const apiUrl = siteUrl + 'actions/quick-edit/default/get-quick-edit?uri=' + encodeURIComponent(uri);
     document.addEventListener("DOMContentLoaded", async () => {

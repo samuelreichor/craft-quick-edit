@@ -32,7 +32,9 @@ class EditService extends Component
             return;
         }
 
-        $html = Craft::$app->getView()->renderTemplate('quick-edit/_edit.twig');
+        $html = Craft::$app->getView()->renderTemplate('quick-edit/_edit.twig', [
+            'isAlwaysEnabled' => $this->getIsAlwaysEnabled() ? 'true' : 'false',
+        ]);
 
         Craft::$app->getView()->registerHtml($html, View::POS_END);
     }
@@ -44,7 +46,12 @@ class EditService extends Component
      */
     public function canRender(): bool
     {
-        return self::isGlobalEnabled() && self::canEdit();
+        // Bypass context and permission
+        if ($this->getIsAlwaysEnabled()) {
+            return true;
+        }
+
+        return self::isGlobalEnabled() && self::isInAllowedContext();
     }
 
     /**
@@ -52,7 +59,7 @@ class EditService extends Component
      *
      * @return bool
      */
-    public function canEdit(): bool
+    public function isInAllowedContext(): bool
     {
         $request = Craft::$app->getRequest();
         return (
@@ -107,5 +114,10 @@ class EditService extends Component
     public function getLinkText(): string
     {
         return ltrim($this->settings->linkText);
+    }
+
+    public function getIsAlwaysEnabled(): bool
+    {
+        return $this->settings->alwaysEnabled;
     }
 }
