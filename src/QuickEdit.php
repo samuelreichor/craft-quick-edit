@@ -77,7 +77,7 @@ class QuickEdit extends Plugin
         Event::on(
             UsersController::class,
             UsersController::EVENT_AFTER_FIND_LOGIN_USER,
-            function () {
+            function() {
                 setcookie('logged-in', 'true', [
                     'expires' => 0,
                     'path' => '/',

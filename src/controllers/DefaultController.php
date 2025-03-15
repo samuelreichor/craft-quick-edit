@@ -23,7 +23,7 @@ class DefaultController extends Controller
     {
         $editService = QuickEdit::getInstance()->edit;
 
-        if(!$editService->canRender()) {
+        if (!$editService->canRender()) {
             return self::respondWithNoEdit();
         }
 
@@ -34,17 +34,17 @@ class DefaultController extends Controller
         }
 
         $model = Entry::find()->uri($uri)->one();
-        if(Utils::isPluginInstalledAndEnabled('commerce') && !$model) {
-            $model = Product::find()->uri($uri)->one();
+        if (Utils::isPluginInstalledAndEnabled('commerce') && !$model) {
+            $model = Product::find()->uri($uri)->one(); // @phpstan-ignore-line
         }
 
-        if(!$model) {
-           return self::respondWithNoEdit();
+        if (!$model) {
+            return self::respondWithNoEdit();
         }
 
         $canEdit = Craft::$app->getElements()->canSave($model);
 
-        if(!$canEdit) {
+        if (!$canEdit) {
             return self::respondWithNoEdit();
         }
 
