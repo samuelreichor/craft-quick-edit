@@ -8,9 +8,11 @@ use craft\base\Plugin;
 use craft\controllers\UsersController;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\web\View;
+use samuelreichor\quickedit\helpers\Utils;
 use samuelreichor\quickedit\models\Settings;
 use samuelreichor\quickedit\services\EditService;
 use yii\base\Event;
+use yii\log\FileTarget;
 
 /**
  * quick-edit plugin
@@ -41,9 +43,10 @@ class QuickEdit extends Plugin
     {
         parent::init();
 
-        $this->attachEventHandlers();
+        $this->initLogger();
 
         Craft::$app->onInit(function() {
+            $this->attachEventHandlers();
             $this->edit->renderQuickEdit();
         });
     }
@@ -78,14 +81,38 @@ class QuickEdit extends Plugin
             UsersController::class,
             UsersController::EVENT_AFTER_FIND_LOGIN_USER,
             function() {
-                setcookie('logged-in', 'true', [
-                    'expires' => 0,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => false,
-                    'samesite' => 'Lax',
-                ]);
+                $this->setLoggedInCookie();
             }
         );
+
+        if (Utils::isPluginInstalledAndEnabled('social-login')) {
+            Event::on(\verbb\sociallogin\services\Users::class, \verbb\sociallogin\services\Users::EVENT_AFTER_LOGIN, // @phpstan-ignore-line
+                function() {
+                    $this->setLoggedInCookie();
+                }
+            );
+        }
+    }
+
+    private function setLoggedInCookie(): void
+    {
+        setcookie('logged-in', 'true', [
+            'expires' => 0,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    protected function initLogger(): void
+    {
+        $logFileTarget = new FileTarget([
+            'logFile' => '@storage/logs/quick-edit.log',
+            'maxLogFiles' => 10,
+            'categories' => ['quick-edit'],
+            'logVars' => [],
+        ]);
+        Craft::getLogger()->dispatcher->targets[] = $logFileTarget;
     }
 }
