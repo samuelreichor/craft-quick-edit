@@ -1,5 +1,8 @@
 # Release Notes for Quick Edit
 
+## 5.2.0 - 2025-04-08
+- Add support for Verbb Social Login
+
 ## 5.1.0 - 2025-03-15
 - Add support for Craft 4
 - Add a bypass setting to always show the quick edit button
