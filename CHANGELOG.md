@@ -1,5 +1,8 @@
 # Release Notes for Quick Edit
 
+## 5.2.1 - 2025-05-30
+- Fix issue with standalone preview link generation
+
 ## 5.2.0 - 2025-04-08
 - Add support for Verbb Social Login
 
