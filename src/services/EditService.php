@@ -104,7 +104,8 @@ class EditService extends Component
     public function getQuickEditUrl(Entry|Product $model): string // @phpstan-ignore-line
     {
         if ($this->settings->isStandalonePreview) {
-            return UrlHelper::cpUrl() . '/preview/' . $model->id; // @phpstan-ignore-line
+            $path = UrlHelper::prependCpTrigger('preview/' . $model->id); // @phpstan-ignore-line
+            return UrlHelper::cpUrl($path);
         }
 
         return $model->getCpEditUrl(); // @phpstan-ignore-line
