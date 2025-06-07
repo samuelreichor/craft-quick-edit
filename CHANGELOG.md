@@ -1,5 +1,9 @@
 # Release Notes for Quick Edit
 
+## 5.2.2 - 2025-06-07
+- Adjust installation behavior to set a cookie in dev mode.
+  This ensures you don't have to log out and back in after installation.
+
 ## 5.2.1 - 2025-05-30
 - Fix issue with standalone preview link generation
 

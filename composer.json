@@ -3,7 +3,7 @@
   "description": "A plugin that adds a cp edit url to the frontend.",
   "type": "craft-plugin",
   "license": "mit",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "support": {
     "email": "samuelreichor@gmail.com",
     "issues": "https://github.com/samuelreichor/craft-quick-edit/issues?state=open",
