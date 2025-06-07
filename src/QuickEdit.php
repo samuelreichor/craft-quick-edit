@@ -6,7 +6,9 @@ use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
 use craft\controllers\UsersController;
+use craft\events\PluginEvent;
 use craft\events\RegisterTemplateRootsEvent;
+use craft\services\Plugins;
 use craft\web\View;
 use samuelreichor\quickedit\helpers\Utils;
 use samuelreichor\quickedit\models\Settings;
@@ -74,6 +76,17 @@ class QuickEdit extends Plugin
             View::EVENT_REGISTER_SITE_TEMPLATE_ROOTS,
             function(RegisterTemplateRootsEvent $event) {
                 $event->roots['quick-edit'] = __DIR__ . '/templates';
+            }
+        );
+
+        /* Set cookie on local plugin installation, because you probably have admin rights.*/
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function(PluginEvent $event) {
+                if ($event->plugin === $this && Craft::$app->getConfig()->general->devMode) {
+                    $this->setLoggedInCookie();
+                }
             }
         );
 
