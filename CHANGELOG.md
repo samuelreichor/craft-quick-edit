@@ -1,5 +1,12 @@
 # Release Notes for Quick Edit
 
+## 5.3.0 - 2025-01-16
+- Add CSP (Content Security Policy) compatibility
+- Add `autoInject` setting to disable automatic injection of JS and CSS
+- Add Twig variable `craft.quickEdit.render()` for manual template output
+- Add optional nonce parameter `craft.quickEdit.render(nonce)` for CSP nonce support
+- Add `craft.quickEdit.js()` and `craft.quickEdit.css()` for full control over output
+
 ## 5.2.2 - 2025-06-07
 - Adjust installation behavior to set a cookie in dev mode.
   This ensures you don't have to log out and back in after installation.
