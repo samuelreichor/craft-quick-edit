@@ -12,6 +12,14 @@
     on: settings.isGlobalDisabled,
   }) }}
 
+  {{ forms.lightswitchField({
+    label: 'Auto-inject JavaScript and CSS',
+    instructions: 'Automatically inject the Quick Edit JavaScript and CSS into every page. Disable this for Content Security Policy (CSP) compatibility and use template tags instead: <code>{{ craft.quickEdit.render() }}</code>',
+    id: 'auto-inject',
+    name: 'autoInject',
+    on: settings.autoInject,
+  }) }}
+
   {{ forms.textField({
     label: 'Change Link Text',
     instructions: 'To render a link text instead of the icon, type some text in.',
