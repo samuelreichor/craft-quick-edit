@@ -28,13 +28,13 @@ class EditService extends Component
      */
     public function renderQuickEdit(): void
     {
-        if (!self::canRender()) {
+        if (!self::canRender() || !$this->isAutoInjectEnabled()) {
             return;
         }
 
-        $html = Craft::$app->getView()->renderTemplate('quick-edit/_edit.twig', [
-            'isAlwaysEnabled' => $this->getIsAlwaysEnabled() ? 'true' : 'false',
-        ]);
+        $html = '<div class="craft-quick-edit"></div>';
+        $html .= '<script>' . $this->getJs() . '</script>';
+        $html .= '<style>' . $this->getCss() . '</style>';
 
         Craft::$app->getView()->registerHtml($html, View::POS_END);
     }
@@ -124,5 +124,97 @@ class EditService extends Component
     public function getIsAlwaysEnabled(): bool
     {
         return $this->settings->alwaysEnabled;
+    }
+
+    /**
+     * Check if auto-injection is enabled
+     *
+     * @return bool
+     */
+    public function isAutoInjectEnabled(): bool
+    {
+        return $this->settings->autoInject;
+    }
+
+    /**
+     * Get the JavaScript code for Quick Edit
+     *
+     * @return string
+     */
+    public function getJs(): string
+    {
+        $isAlwaysEnabled = $this->getIsAlwaysEnabled() ? 'true' : 'false';
+        $uri = Craft::$app->getRequest()->getPathInfo();
+        $siteUrl = UrlHelper::siteUrl();
+
+        return <<<JS
+const isAlwaysEnabled = {$isAlwaysEnabled};
+if (isLikelyLoggedIn() || isAlwaysEnabled) {
+  const uri = "{$uri}";
+  const siteUrl = "{$siteUrl}";
+  const apiUrl = siteUrl + 'actions/quick-edit/default/get-quick-edit?uri=' + encodeURIComponent(uri);
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      if (data.canEdit) {
+        const parentEl = document.querySelector('.craft-quick-edit');
+        const fallbackIcon = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
+          </svg>
+        `;
+        const linkText = (data.linkText && data.linkText.trim().length > 0)
+            ? data.linkText
+            : fallbackIcon;
+        const linkEl = document.createElement('a');
+        linkEl.classList.add('craft-quick-edit_link');
+        linkEl.target = data.target;
+        linkEl.href = data.editUrl || '#';
+        linkEl.title = "Edit Page";
+        linkEl.innerHTML = linkText;
+        parentEl.appendChild(linkEl);
+      }
+    } catch (error) {
+      console.error('Quick Edit Error:', error);
+    }
+  });
+}
+
+function isLikelyLoggedIn() {
+  return document.cookie.indexOf('logged-in=') !== -1;
+}
+JS;
+    }
+
+    /**
+     * Get the CSS code for Quick Edit
+     *
+     * @return string
+     */
+    public function getCss(): string
+    {
+        return <<<CSS
+.craft-quick-edit {
+.craft-quick-edit_link {
+    position: fixed;
+    display: flex;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 1000;
+    background-color: black;
+    color: white;
+    padding: 6px;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: opacity 300ms;
+
+    &:hover {
+    opacity: 85%;
+    }
+}
+}
+CSS;
     }
 }

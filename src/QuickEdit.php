@@ -9,10 +9,12 @@ use craft\controllers\UsersController;
 use craft\events\PluginEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\services\Plugins;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use samuelreichor\quickedit\helpers\Utils;
 use samuelreichor\quickedit\models\Settings;
 use samuelreichor\quickedit\services\EditService;
+use samuelreichor\quickedit\variables\QuickEditVariable;
 use yii\base\Event;
 use yii\log\FileTarget;
 
@@ -76,6 +78,16 @@ class QuickEdit extends Plugin
             View::EVENT_REGISTER_SITE_TEMPLATE_ROOTS,
             function(RegisterTemplateRootsEvent $event) {
                 $event->roots['quick-edit'] = __DIR__ . '/templates';
+            }
+        );
+
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function(Event $event) {
+                /** @var CraftVariable $variable */
+                $variable = $event->sender;
+                $variable->set('quickEdit', QuickEditVariable::class);
             }
         );
 

@@ -23,4 +23,7 @@ class Settings extends Model
 
     // Always enable the quick edit for development purposes
     public bool $alwaysEnabled = false;
+
+    // Automatically inject JS and CSS into the page (disable for CSP compatibility)
+    public bool $autoInject = true;
 }
