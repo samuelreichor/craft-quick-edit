@@ -5,13 +5,9 @@ namespace samuelreichor\quickedit;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
-use craft\controllers\UsersController;
-use craft\events\PluginEvent;
 use craft\events\RegisterTemplateRootsEvent;
-use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
-use samuelreichor\quickedit\helpers\Utils;
 use samuelreichor\quickedit\models\Settings;
 use samuelreichor\quickedit\services\EditService;
 use samuelreichor\quickedit\variables\QuickEditVariable;
@@ -90,44 +86,6 @@ class QuickEdit extends Plugin
                 $variable->set('quickEdit', QuickEditVariable::class);
             }
         );
-
-        /* Set cookie on local plugin installation, because you probably have admin rights.*/
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function(PluginEvent $event) {
-                if ($event->plugin === $this && Craft::$app->getConfig()->general->devMode) {
-                    $this->setLoggedInCookie();
-                }
-            }
-        );
-
-        Event::on(
-            UsersController::class,
-            UsersController::EVENT_AFTER_FIND_LOGIN_USER,
-            function() {
-                $this->setLoggedInCookie();
-            }
-        );
-
-        if (Utils::isPluginInstalledAndEnabled('social-login')) {
-            Event::on(\verbb\sociallogin\services\Users::class, \verbb\sociallogin\services\Users::EVENT_AFTER_LOGIN, // @phpstan-ignore-line
-                function() {
-                    $this->setLoggedInCookie();
-                }
-            );
-        }
-    }
-
-    private function setLoggedInCookie(): void
-    {
-        setcookie('logged-in', 'true', [
-            'expires' => 0,
-            'path' => '/',
-            'secure' => true,
-            'httponly' => false,
-            'samesite' => 'Lax',
-        ]);
     }
 
     protected function initLogger(): void
