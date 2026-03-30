@@ -50,8 +50,7 @@ class EditService extends Component
             return false;
         }
 
-        // Bypass context and permission
-        if ($this->getIsAlwaysEnabled()) {
+        if ($this->settings->alwaysEnabled) {
             return true;
         }
 
@@ -121,11 +120,6 @@ class EditService extends Component
         return ltrim($this->settings->linkText);
     }
 
-    public function getIsAlwaysEnabled(): bool
-    {
-        return $this->settings->alwaysEnabled;
-    }
-
     /**
      * Check if auto-injection is enabled
      *
@@ -143,48 +137,40 @@ class EditService extends Component
      */
     public function getJs(): string
     {
-        $isAlwaysEnabled = $this->getIsAlwaysEnabled() ? 'true' : 'false';
         $uri = Craft::$app->getRequest()->getPathInfo();
         $siteUrl = UrlHelper::siteUrl();
 
         return <<<JS
-const isAlwaysEnabled = {$isAlwaysEnabled};
-if (isLikelyLoggedIn() || isAlwaysEnabled) {
-  const uri = "{$uri}";
-  const siteUrl = "{$siteUrl}";
-  const apiUrl = siteUrl + 'actions/quick-edit/default/get-quick-edit?uri=' + encodeURIComponent(uri);
-  document.addEventListener("DOMContentLoaded", async () => {
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      if (data.canEdit) {
-        const parentEl = document.querySelector('.craft-quick-edit');
-        const fallbackIcon = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-            <path fill="currentColor"
-              d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
-          </svg>
-        `;
-        const linkText = (data.linkText && data.linkText.trim().length > 0)
-            ? data.linkText
-            : fallbackIcon;
-        const linkEl = document.createElement('a');
-        linkEl.classList.add('craft-quick-edit_link');
-        linkEl.target = data.target;
-        linkEl.href = data.editUrl || '#';
-        linkEl.title = "Edit Page";
-        linkEl.innerHTML = linkText;
-        parentEl.appendChild(linkEl);
-      }
-    } catch (error) {
-      console.error('Quick Edit Error:', error);
+const uri = "{$uri}";
+const siteUrl = "{$siteUrl}";
+const apiUrl = siteUrl + 'actions/quick-edit/default/get-quick-edit?uri=' + encodeURIComponent(uri);
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    if (data.canEdit) {
+      const parentEl = document.querySelector('.craft-quick-edit');
+      const fallbackIcon = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+          <path fill="currentColor"
+            d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/>
+        </svg>
+      `;
+      const linkText = (data.linkText && data.linkText.trim().length > 0)
+          ? data.linkText
+          : fallbackIcon;
+      const linkEl = document.createElement('a');
+      linkEl.classList.add('craft-quick-edit_link');
+      linkEl.target = data.target;
+      linkEl.href = data.editUrl || '#';
+      linkEl.title = "Edit Page";
+      linkEl.innerHTML = linkText;
+      parentEl.appendChild(linkEl);
     }
-  });
-}
-
-function isLikelyLoggedIn() {
-  return document.cookie.indexOf('logged-in=') !== -1;
-}
+  } catch (error) {
+    console.error('Quick Edit Error:', error);
+  }
+});
 JS;
     }
 
