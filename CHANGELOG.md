@@ -1,5 +1,9 @@
 # Release Notes for Quick Edit
 
+## 5.3.1 - 2026-03-30
+- Fix quick edit on multi domain setups by removing the isLoggedIn check. 
+The request is async and happens after the page loaded, so this shouldn't add any noticeable performance issues and removes a lot of problems. 
+
 ## 5.3.0 - 2025-01-16
 - Add CSP (Content Security Policy) compatibility
 - Add `autoInject` setting to disable automatic injection of JS and CSS
