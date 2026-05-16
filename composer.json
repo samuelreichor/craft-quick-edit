@@ -3,7 +3,7 @@
   "description": "A plugin that adds a cp edit url to the frontend.",
   "type": "craft-plugin",
   "license": "mit",
-  "version": "5.3.1",
+  "version": "6.0.0-alpha.1",
   "support": {
     "email": "samuelreichor@gmail.com",
     "issues": "https://github.com/samuelreichor/craft-quick-edit/issues?state=open",
@@ -19,8 +19,9 @@
     "quick edit"
   ],
   "require": {
-    "php": ">=8.0",
-    "craftcms/cms": "^4.0|^5.0"
+    "php": ">=8.5",
+    "craftcms/cms": "^6.0",
+    "craftcms/yii2-adapter": "^6.0"
   },
   "require-dev": {
     "craftcms/ecs": "dev-main",
@@ -46,7 +47,7 @@
   "config": {
     "sort-packages": true,
     "platform": {
-      "php": "8.2"
+      "php": "8.5"
     },
     "allow-plugins": {
       "yiisoft/yii2-composer": true,
